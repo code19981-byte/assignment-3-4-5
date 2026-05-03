@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemistry Assignments — GTU</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #141720;
+  --surface2: #1c2030;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --muted: #8891a8;
+  --dim: #545d73;
+  --green: #2dd4a0;
+  --green-dim: rgba(45,212,160,0.12);
+  --green-glow: rgba(45,212,160,0.2);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251,191,36,0.12);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.12);
+  --coral: #fb7185;
+  --teal: #2dd4bf;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;overflow-x:hidden}
+
+/* Grid background */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);background:rgba(13,15,20,0.85);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.05em;color:var(--text)}
+.nav-logo span{color:var(--green)}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{padding:6px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;border:none;background:transparent;color:var(--muted);letter-spacing:0.02em}
+.nav-tab:hover{color:var(--text);background:var(--surface2)}
+.nav-tab.active{color:var(--bg);background:var(--green)}
+
+/* Hero */
+.hero{position:relative;max-width:900px;margin:0 auto;padding:4rem 2rem 2.5rem;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid rgba(45,212,160,0.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:500;color:var(--green);margin-bottom:1.25rem;letter-spacing:0.06em;text-transform:uppercase}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+h1{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:700;line-height:1.15;letter-spacing:-0.02em;margin-bottom:0.75rem}
+h1 em{font-style:normal;color:var(--green)}
+.hero-sub{color:var(--muted);font-size:15px;max-width:480px}
+.hero-meta{display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
+.meta-chip span{color:var(--text);font-weight:500}
+
+/* Assignment selector buttons */
+.selector{max-width:900px;margin:0 auto;padding:0 2rem 2rem;position:relative;z-index:1}
+.selector-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.75rem;font-weight:500}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.asgn-btn{display:flex;align-items:center;gap:10px;padding:10px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.25s;letter-spacing:0.04em;position:relative;overflow:hidden}
+.asgn-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.25s}
+.asgn-btn:hover{color:var(--text);border-color:var(--border2);transform:translateY(-1px)}
+.asgn-btn.a3.active,.asgn-btn.a3:hover{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+.asgn-btn.a4.active,.asgn-btn.a4:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
+.asgn-btn.a5.active,.asgn-btn.a5:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-dim)}
+.asgn-btn .badge{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.asgn-btn.a3 .badge{background:var(--green-dim);color:var(--green)}
+.asgn-btn.a4 .badge{background:var(--blue-dim);color:var(--blue)}
+.asgn-btn.a5 .badge{background:var(--amber-dim);color:var(--amber)}
+.asgn-btn .sub{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;opacity:0.7;margin-top:-2px}
+
+/* Content panels */
+.panel{display:none;max-width:900px;margin:0 auto;padding:0 2rem 4rem;position:relative;z-index:1;animation:fadeUp 0.35s ease}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Panel header */
+.panel-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);gap:1rem;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.01em}
+.panel-title .accent-3{color:var(--green)}
+.panel-title .accent-4{color:var(--blue)}
+.panel-title .accent-5{color:var(--amber)}
+.panel-stats{display:flex;gap:1rem;flex-wrap:wrap}
+.stat{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;color:var(--muted)}
+.stat strong{color:var(--text);font-weight:500}
+
+/* Q Cards */
+.q-grid{display:flex;flex-direction:column;gap:10px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s}
+.q-card:hover{border-color:var(--border2)}
+.q-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+.q-head:hover .q-title{color:var(--text)}
+.q-num{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;flex-shrink:0;letter-spacing:0.04em}
+.num-3{background:var(--green-dim);color:var(--green)}
+.num-4{background:var(--blue-dim);color:var(--blue)}
+.num-5{background:var(--amber-dim);color:var(--amber)}
+.q-title{font-size:14px;font-weight:500;color:var(--muted);flex:1;transition:color 0.2s}
+.q-marks{font-size:11px;color:var(--dim);white-space:nowrap}
+.chevron{color:var(--dim);font-size:11px;transition:transform 0.25s;flex-shrink:0}
+.chevron.open{transform:rotate(180deg)}
+
+.q-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border)}
+.q-body.open{display:block}
+
+.def-box{background:var(--surface2);border-left:2px solid var(--green);border-radius:0 8px 8px 0;padding:10px 14px;margin:14px 0 10px;font-size:13.5px;color:var(--text);line-height:1.65}
+.def-box.blue{border-left-color:var(--blue)}
+.def-box.amber{border-left-color:var(--amber)}
+
+.sec-label{font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);font-weight:600;margin:14px 0 7px}
+
+.point{display:flex;gap:8px;font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:5px}
+.dot{width:4px;height:4px;border-radius:50%;background:var(--green);margin-top:9px;flex-shrink:0}
+.dot.blue{background:var(--blue)}
+.dot.amber{background:var(--amber)}
+.point strong{color:var(--text);font-weight:500}
+
+.rxn{background:#0a0d12;border:1px solid var(--border);border-radius:7px;padding:7px 12px;font-family:'Courier New',monospace;font-size:12.5px;color:var(--teal);margin:5px 0;letter-spacing:0.02em}
+
+.eg-note{font-size:12px;color:var(--dim);font-style:italic;margin-top:4px}
+
+.tip-box{display:flex;gap:8px;align-items:flex-start;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:12.5px;color:#d97706;line-height:1.5}
+.tip-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:6px 1.5rem}
+@media(max-width:500px){.two-col{grid-template-columns:1fr}}
+
+.sub-section{background:var(--surface2);border-radius:8px;padding:10px 14px;margin:8px 0}
+.sub-section-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:0.03em}
+
+/* Expand all */
+.expand-btn{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:1.25rem;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.expand-btn:hover{color:var(--text);border-color:var(--border2)}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:12px;color:var(--dim);position:relative;z-index:1}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">CHEM<span>•</span>GTU</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPanel('a3',this)">Assign. 3</button>
+      <button class="nav-tab" onclick="showPanel('a4',this)">Assign. 4</button>
+      <button class="nav-tab" onclick="showPanel('a5',this)">Assign. 5</button>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">GTU Exam Prep</div>
+  <h1>Chemistry<br><em>Assignment Notes</em></h1>
+  <p class="hero-sub">6-mark GTU exam answers for Corrosion, Lubricants & Polymers — clean, point-wise, exam-ready.</p>
+  <div class="hero-meta">
+    <div class="meta-chip">Assignments <span>3 · 4 · 5</span></div>
+    <div class="meta-chip">Questions <span>21 total</span></div>
+    <div class="meta-chip">Format <span>6-mark GTU</span></div>
+  </div>
+</div>
+
+<div class="selector">
+  <div class="selector-label">Select Assignment</div>
+  <div class="btn-row">
+    <button class="asgn-btn a3 active" onclick="showPanel('a3',null,this)">
+      <div class="badge">3</div>
+      <div>
+        <div>Assignment 3</div>
+        <div class="sub">Corrosion of Metals</div>
+      </div>
+    </button>
+    <button class="asgn-btn a4" onclick="showPanel('a4',null,this)">
+      <div class="badge">4</div>
+      <div>
+        <div>Assignment 4</div>
+        <div class="sub">Lubricants</div>
+      </div>
+    </button>
+    <button class="asgn-btn a5" onclick="showPanel('a5',null,this)">
+      <div class="badge">5</div>
+      <div>
+        <div>Assignment 5</div>
+        <div class="sub">Polymers</div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- ===================== ASSIGNMENT 3 ===================== -->
+<div class="panel active" id="panel-a3">
+  <div class="panel-header">
+    <div class="panel-title"><span class="accent-3">Assignment 3</span> — Corrosion of Metals & Its Prevention</div>
+    <div class="panel-stats">
+      <div class="stat"><strong>7</strong> Questions</div>
+      <div class="stat"><strong>42</strong> Total Marks</div>
+      <div class="stat"><strong>Unit 3</strong></div>
+    </div>
+  </div>
+  <button class="expand-btn" onclick="expandAll('a3')">▼ Expand all answers</button>
+  <div class="q-grid">
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q1</span>
+        <span class="q-title">Definition of Corrosion with example</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box">Corrosion is the gradual destruction of a metal by chemical or electrochemical reaction with its surrounding environment (air, moisture, chemicals).</div>
+        <div class="sec-label">Key Points</div>
+        <div class="point"><div class="dot"></div><span>It is an undesirable, spontaneous process that weakens metals over time.</span></div>
+        <div class="point"><div class="dot"></div><span>Corrosion products are usually oxides, hydroxides, or salts of the metal.</span></div>
+        <div class="point"><div class="dot"></div><span>It causes huge economic loss, structural failure, and safety hazards.</span></div>
+        <div class="sec-label">Example — Rusting of Iron</div>
+        <div class="rxn">4Fe + 3O₂ + 6H₂O → 2(Fe₂O₃·3H₂O)</div>
+        <div class="eg-note">Iron reacts with oxygen and moisture in air to form hydrated ferric oxide (rust).</div>
+        <div class="sec-label">Types of Corrosion</div>
+        <div class="point"><div class="dot"></div><span><strong>Dry (chemical) corrosion</strong> — without moisture, reaction with gases.</span></div>
+        <div class="point"><div class="dot"></div><span><strong>Wet (electrochemical) corrosion</strong> — in presence of electrolyte/moisture.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Definition + reaction equation = guaranteed 3 marks. Add types for full 6.</span></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q2</span>
+        <span class="q-title">Dry or Chemical Corrosion</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box">Dry corrosion occurs when metals react directly with gases (O₂, Cl₂, SO₂, H₂S, F₂) at ordinary or elevated temperature without water or moisture.</div>
+        <div class="sec-label">Types of Dry Corrosion</div>
+        <div class="sub-section">
+          <div class="sub-section-title">A) Oxidation Corrosion</div>
+          <div class="point"><div class="dot"></div><span>Metal reacts with O₂ → thin oxide film on surface.</span></div>
+          <div class="point"><div class="dot"></div><span>If film is stable (non-porous, adherent) → corrosion slows down — e.g. Al, Cu.</span></div>
+          <div class="point"><div class="dot"></div><span>If film is porous → O₂ reaches fresh metal → corrosion continues — e.g. Fe, Mg.</span></div>
+          <div class="rxn">Al → Al₂O₃ (protective, non-porous)</div>
+          <div class="rxn">Fe → FeO, Fe₂O₃, Fe₃O₄ (non-protective scales)</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">B) Corrosion by Other Gases</div>
+          <div class="point"><div class="dot"></div><span>Gases like Cl₂, SO₂, H₂S, CO₂ react directly with metal.</span></div>
+          <div class="rxn">Ag + H₂S → Ag₂S (black tarnishing of silver ornaments)</div>
+          <div class="rxn">Fe + Cl₂ → FeCl₂ (non-protective scales)</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Protective vs non-protective film distinction scores extra marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q3</span>
+        <span class="q-title">Wet or Electrochemical Corrosion</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box">Wet corrosion occurs when a metal is in contact with an electrolyte (water containing ions). An electrochemical cell is set up on the metal surface where some parts act as anode and others as cathode.</div>
+        <div class="sec-label">Mechanism</div>
+        <div class="point"><div class="dot"></div><span>Anode parts → oxidation → metal dissolves.</span></div>
+        <div class="point"><div class="dot"></div><span>Cathode parts → reduction → protected from corrosion.</span></div>
+        <div class="sub-section">
+          <div class="sub-section-title">Type 1 — Corrosion with H₂ Evolution (Acidic Medium — HCl, H₂SO₄)</div>
+          <div class="rxn">Anode: M → Mⁿ⁺ + ne⁻ (metal dissolves)</div>
+          <div class="rxn">Cathode: 2H⁺ + 2e⁻ → H₂↑</div>
+          <div class="eg-note">Example: Fe + 2HCl → FeCl₂ + H₂↑</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Type 2 — Corrosion with O₂ Absorption (Neutral/Alkaline Medium)</div>
+          <div class="rxn">Anode: Fe → Fe²⁺ + 2e⁻</div>
+          <div class="rxn">Cathode: O₂ + 2H₂O + 4e⁻ → 4OH⁻</div>
+          <div class="rxn">Fe²⁺ + 2OH⁻ → Fe(OH)₂ → Fe₂O₃·xH₂O (rust)</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Always write both anode and cathode reactions — each reaction earns marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q4</span>
+        <span class="q-title">Galvanic (Bimetallic) Corrosion</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box">Galvanic corrosion is a type of electrochemical corrosion that occurs when two dissimilar metals are in electrical contact with each other in the presence of an electrolyte.</div>
+        <div class="sec-label">Mechanism</div>
+        <div class="point"><div class="dot"></div><span><strong>More active (less noble) metal</strong> → anode → oxidation → corrodes.</span></div>
+        <div class="point"><div class="dot"></div><span><strong>Less active (more noble) metal</strong> → cathode → reduction → protected.</span></div>
+        <div class="rxn">Anode: M → Mⁿ⁺ + ne⁻ (active metal corrodes)</div>
+        <div class="rxn">Cathode: O₂ + 2H₂O + 4e⁻ → 4OH⁻ (less active metal protected)</div>
+        <div class="sec-label">Example — Zn and Cu in Moist Air</div>
+        <div class="point"><div class="dot"></div><span>Zn (more active, less noble) → anode → corrodes.</span></div>
+        <div class="point"><div class="dot"></div><span>Cu (less active, more noble) → cathode → protected from corrosion.</span></div>
+        <div class="sec-label">Prevention</div>
+        <div class="point"><div class="dot"></div><span>Avoid joining dissimilar metals directly.</span></div>
+        <div class="point"><div class="dot"></div><span>Use insulating/rubber gaskets between different metals.</span></div>
+        <div class="point"><div class="dot"></div><span>Select metals close in EMF series to minimize galvanic effect.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Greater the difference in electrode potential → faster galvanic corrosion.</span></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q5</span>
+        <span class="q-title">Concentration Cell Corrosion</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box">Concentration cell corrosion is a type of electrochemical corrosion that occurs when two areas of the same metal are exposed to an electrolyte of different concentrations (different O₂ or ion concentration).</div>
+        <div class="sec-label">Mechanism</div>
+        <div class="point"><div class="dot"></div><span>Region with <strong>lower O₂ concentration</strong> → acts as anode → corrodes.</span></div>
+        <div class="point"><div class="dot"></div><span>Region with <strong>higher O₂ concentration</strong> → acts as cathode → protected.</span></div>
+        <div class="point"><div class="dot"></div><span>Corrosion occurs due to difference in ion or oxygen concentration in electrolyte.</span></div>
+        <div class="sec-label">Reactions</div>
+        <div class="rxn">Anode: Fe → Fe²⁺ + 2e⁻</div>
+        <div class="rxn">Cathode: ½O₂ + H₂O + 2e⁻ → 2OH⁻</div>
+        <div class="rxn">Fe²⁺ + 2OH⁻ → Fe(OH)₂ → Rust</div>
+        <div class="sec-label">Types</div>
+        <div class="point"><div class="dot"></div><span>Oxygen concentration cell (most common)</span></div>
+        <div class="point"><div class="dot"></div><span>Ion concentration cell</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Link to pitting and waterline corrosion — they are real-life examples of concentration cell corrosion.</span></div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q6</span>
+        <span class="q-title">Pitting Corrosion & Waterline Corrosion</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">Pitting Corrosion</div>
+          <div class="point"><div class="dot"></div><span>Parts covered by rust, scale, or dirt get <strong>less O₂</strong> → act as anode → corrode.</span></div>
+          <div class="point"><div class="dot"></div><span>Uncovered parts with <strong>more O₂</strong> → cathode → protected.</span></div>
+          <div class="point"><div class="dot"></div><span>Once pit forms, inside becomes acidic → accelerates further corrosion rapidly.</span></div>
+          <div class="point"><div class="dot"></div><span>Results in formation of pin-holes, pits, and cavities in metal surface.</span></div>
+          <div class="rxn">Anode: Fe → Fe²⁺ + 2e⁻</div>
+          <div class="rxn">Cathode: H₂O + ½O₂ + 2e⁻ → 2OH⁻</div>
+          <div class="rxn">∴ Fe²⁺ + 2OH⁻ → Fe(OH)₂ → Fe₂O₃·xH₂O (rust)</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Waterline Corrosion</div>
+          <div class="point"><div class="dot"></div><span>Occurs at liquid-air boundary in steel tanks or pipes with stagnant water.</span></div>
+          <div class="point"><div class="dot"></div><span>O₂ concentration above waterline > below waterline → concentration cell formed.</span></div>
+          <div class="point"><div class="dot"></div><span>Metal <strong>just below waterline</strong> (less O₂) → anode → corrodes.</span></div>
+          <div class="point"><div class="dot"></div><span>Metal <strong>above waterline</strong> (more O₂) → cathode → unaffected.</span></div>
+          <div class="rxn">At anode: Fe → Fe²⁺ + 2e⁻</div>
+          <div class="rxn">At cathode: 4H⁺ + O₂ + 4e⁻ → 2H₂O</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Draw a simple sketch of pit or waterline level to earn diagram marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-3">Q7</span>
+        <span class="q-title">Factors Affecting Corrosion & Prevention Methods</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sec-label">Factors Affecting Rate of Corrosion</div>
+        <div class="two-col">
+          <div>
+            <div class="point"><div class="dot"></div><span>Nature of surface film (porous or non-porous)</span></div>
+            <div class="point"><div class="dot"></div><span>pH of solution (acidic pH &lt; 7 → more corrosive)</span></div>
+            <div class="point"><div class="dot"></div><span>Area of anode & cathode (large cathode → more corrosion)</span></div>
+          </div>
+          <div>
+            <div class="point"><div class="dot"></div><span>Temperature (higher temp → more corrosion)</span></div>
+            <div class="point"><div class="dot"></div><span>Moisture (more humidity → more corrosion)</span></div>
+            <div class="point"><div class="dot"></div><span>Purity of metal (impure metal corrodes faster)</span></div>
+          </div>
+        </div>
+        <div class="sec-label">Methods of Prevention</div>
+        <div class="point"><div class="dot"></div><span><strong>Modification of environment:</strong> Dehumidification using silica gel; use of inhibitors (anodic, cathodic, organic).</span></div>
+        <div class="point"><div class="dot"></div><span><strong>Modification of metal:</strong> Purification; alloying with Cr, Ni, Mo (e.g. stainless steel = Fe + Cr + Ni).</span></div>
+        <div class="point"><div class="dot"></div><span><strong>Protective coatings:</strong> Galvanizing (Zn on Fe), tinning (Sn on Fe), electroplating, metal spraying, cladding, paints, enamels, varnishes.</span></div>
+        <div class="point"><div class="dot"></div><span><strong>Cathodic protection:</strong> Sacrificial anode method (Zn, Al, Mg) or impressed current method.</span></div>
+        <div class="point"><div class="dot"></div><span><strong>Design modification:</strong> Avoid crevices, ensure proper drainage, separate dissimilar metals using insulators.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Write at least 5 prevention methods — 1 line each. Mention galvanization and sacrificial anode specifically.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== ASSIGNMENT 4 ===================== -->
+<div class="panel" id="panel-a4">
+  <div class="panel-header">
+    <div class="panel-title"><span class="accent-4">Assignment 4</span> — Lubricants & Lubrication</div>
+    <div class="panel-stats">
+      <div class="stat"><strong>6</strong> Questions</div>
+      <div class="stat"><strong>36</strong> Total Marks</div>
+      <div class="stat"><strong>Unit 4</strong></div>
+    </div>
+  </div>
+  <button class="expand-btn" onclick="expandAll('a4')">▼ Expand all answers</button>
+  <div class="q-grid">
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-4">Q1</span>
+        <span class="q-title">Lubricants & Lubrication — Functions of Lubricants</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box blue">A lubricant is a substance applied between two moving or sliding surfaces to reduce friction and wear. The process of applying lubricant between two surfaces to reduce friction is called lubrication.</div>
+        <div class="sec-label">Functions of Lubricants</div>
+        <div class="point"><div class="dot blue"></div><span><strong>Reduce friction:</strong> Form a thin film between moving surfaces → prevents direct metal-to-metal contact.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Reduce wear & tear:</strong> Prevent abrasion of surfaces, increasing machine life.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Cooling effect:</strong> Carry away heat generated due to friction.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Prevent corrosion:</strong> Form a protective film that prevents contact with moisture and air.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Reduce power consumption:</strong> Less friction → less energy needed to run machinery.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Noise reduction:</strong> Cushions the impact between parts → quieter operation.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Sealing effect:</strong> Lubricant fills gaps in engine cylinders → prevents gas leakage.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Write at least 5 functions — each one-liner scores marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-4">Q2</span>
+        <span class="q-title">Mechanism of Lubrication — Fluid & Boundary</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">A) Fluid Film (Hydrodynamic) Lubrication</div>
+          <div class="point"><div class="dot blue"></div><span>A thick continuous film of lubricant completely separates the two surfaces.</span></div>
+          <div class="point"><div class="dot blue"></div><span>No direct metal-to-metal contact occurs.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Friction depends on <strong>viscosity</strong> of lubricant — higher viscosity → thicker film.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Suitable for: high-speed, light-load machinery like bearings, shafts.</span></div>
+          <div class="eg-note">Example: Engine oil in journal bearings.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">B) Boundary Lubrication</div>
+          <div class="point"><div class="dot blue"></div><span>Only a very thin (monomolecular) film of lubricant is present between the surfaces.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Partial metal-to-metal contact may occur under heavy load or slow speed.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Friction depends on <strong>chemical nature</strong> of lubricant, not viscosity.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Suitable for: slow-moving, heavily loaded surfaces like gears and cutting tools.</span></div>
+          <div class="eg-note">Example: Grease used in slow-moving gear systems.</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Fluid = viscosity matters; Boundary = chemical nature matters — this difference is key.</span></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-4">Q3</span>
+        <span class="q-title">Classification of Lubricants with Examples</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box blue">Lubricants are classified into four types based on their physical state: Solid, Semi-solid, Liquid, and Synthetic.</div>
+        <div class="sub-section">
+          <div class="sub-section-title">1. Solid Lubricants</div>
+          <div class="point"><div class="dot blue"></div><span>Used where liquid lubricants cannot be applied (extreme temp, vacuum, high load).</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Examples:</strong> Graphite, Molybdenum disulfide (MoS₂), Talc, Mica, Wax.</span></div>
+          <div class="eg-note">Graphite: used in locks, hinges, open gears at high temperature.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">2. Semi-solid Lubricants (Greases)</div>
+          <div class="point"><div class="dot blue"></div><span>Formed by mixing mineral oil with metallic soaps (Ca, Li, Na soaps).</span></div>
+          <div class="point"><div class="dot blue"></div><span>Used where oil tends to drip or leak — slow speed, heavy load.</span></div>
+          <div class="eg-note">Example: Calcium grease, Lithium grease used in wheel bearings, pumps.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">3. Liquid Lubricants (Oils)</div>
+          <div class="point"><div class="dot blue"></div><span><strong>Mineral oils:</strong> Derived from petroleum — engine oil, gear oil.</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Animal/vegetable oils:</strong> Castor oil, lard oil — biodegradable.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">4. Synthetic Lubricants</div>
+          <div class="point"><div class="dot blue"></div><span>Chemically synthesized — stable over wide temperature range.</span></div>
+          <div class="eg-note">Example: Silicone oil, polyesters, phosphate esters — used in jet engines, aerospace.</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: 4 types with one example each = full 6 marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-4">Q4</span>
+        <span class="q-title">Physical & Chemical Properties of Lubricants</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">Physical Properties</div>
+          <div class="point"><div class="dot blue"></div><span><strong>Viscosity:</strong> Resistance to flow. Most important property — too thick or too thin is bad. Measured in centipoise (cP).</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Viscosity Index (VI):</strong> Rate of change of viscosity with temperature. High VI = viscosity changes less with temperature = better lubricant.</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Flash point:</strong> Lowest temperature at which oil vapour catches fire. Should be high for safety.</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Fire point:</strong> Temperature at which oil itself burns. Always higher than flash point.</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Pour point:</strong> Lowest temperature at which oil just flows. Should be low for cold-climate use.</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Cloud point:</strong> Temperature at which oil becomes cloudy (wax separates).</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Chemical Properties</div>
+          <div class="point"><div class="dot blue"></div><span><strong>Oxidation stability:</strong> Ability to resist oxidation. Good lubricant should not oxidize easily.</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Acid value:</strong> Amount of free acids present. Low acid value = better lubricant (acids cause corrosion).</span></div>
+          <div class="point"><div class="dot blue"></div><span><strong>Saponification value:</strong> Measures fatty oil content — important for blended lubricants.</span></div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Viscosity + Flash point + Pour point = 3 guaranteed mark-fetching properties. Always explain each briefly.</span></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-4">Q5</span>
+        <span class="q-title">Selection of Lubricants for Different Machinery</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box blue">Selection of a lubricant depends on the nature of machinery, load, speed, temperature, and operating conditions.</div>
+        <div class="sub-section">
+          <div class="sub-section-title">1. Gears</div>
+          <div class="point"><div class="dot blue"></div><span>Heavy load, slow speed → <strong>heavy-bodied (high viscosity) oil or grease</strong>.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Extreme pressure (EP) additives added to prevent metal welding under high load.</span></div>
+          <div class="eg-note">Example: Gear oil, lithium grease.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">2. Cutting Tools</div>
+          <div class="point"><div class="dot blue"></div><span>High friction + heat generation → <strong>cutting fluid (soluble oil in water) or cooling oil</strong>.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Acts as both lubricant and coolant — reduces heat and prevents tool damage.</span></div>
+          <div class="eg-note">Example: Soluble cutting oil, sulfurized oil.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">3. Steam Turbines</div>
+          <div class="point"><div class="dot blue"></div><span>High speed, moderate load → <strong>low viscosity, highly refined mineral oil</strong>.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Oil must resist oxidation and water contamination (steam environment).</span></div>
+          <div class="eg-note">Example: Turbine oil (ISO VG 32 or 46).</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">4. Transformers</div>
+          <div class="point"><div class="dot blue"></div><span>Need electrical <strong>insulating oil</strong> — low viscosity, high dielectric strength, high flash point.</span></div>
+          <div class="point"><div class="dot blue"></div><span>Oil also acts as coolant, carrying heat away from coils.</span></div>
+          <div class="eg-note">Example: Transformer oil (mineral oil, highly refined).</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: For each machine — mention type of lubricant + one reason why = full marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-4">Q6</span>
+        <span class="q-title">Biodegradable Lubricants</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box blue">Biodegradable lubricants are lubricants that can be decomposed naturally by microorganisms (bacteria, fungi) in the environment. They are eco-friendly alternatives to conventional petroleum-based lubricants.</div>
+        <div class="sec-label">Why Biodegradable?</div>
+        <div class="point"><div class="dot blue"></div><span>Conventional mineral oils are toxic to environment and do not decompose easily.</span></div>
+        <div class="point"><div class="dot blue"></div><span>Biodegradable lubricants reduce soil and water pollution.</span></div>
+        <div class="sec-label">Types / Base Stocks</div>
+        <div class="point"><div class="dot blue"></div><span><strong>Vegetable oils:</strong> Rapeseed oil (canola), sunflower oil, soybean oil — most widely used.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Synthetic esters:</strong> Good temperature stability + biodegradable — used in aviation, agriculture.</span></div>
+        <div class="point"><div class="dot blue"></div><span><strong>Polyalkylene glycols (PAG):</strong> Water-soluble, used in food-grade machinery.</span></div>
+        <div class="sec-label">Properties</div>
+        <div class="point"><div class="dot blue"></div><span>High viscosity index (VI) — stable over wide temperature range.</span></div>
+        <div class="point"><div class="dot blue"></div><span>Good lubrication performance, low toxicity, renewable source.</span></div>
+        <div class="point"><div class="dot blue"></div><span>Limitation: Lower thermal stability and shorter shelf life than mineral oils.</span></div>
+        <div class="sec-label">Applications</div>
+        <div class="point"><div class="dot blue"></div><span>Agriculture (tractors), forestry equipment, marine vessels, food industry machinery.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Mention rapeseed oil as example + eco-friendly advantage = easy marks.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== ASSIGNMENT 5 ===================== -->
+<div class="panel" id="panel-a5">
+  <div class="panel-header">
+    <div class="panel-title"><span class="accent-5">Assignment 5</span> — Polymers & Insulating Materials</div>
+    <div class="panel-stats">
+      <div class="stat"><strong>8</strong> Questions</div>
+      <div class="stat"><strong>48</strong> Total Marks</div>
+      <div class="stat"><strong>Unit 5</strong></div>
+    </div>
+  </div>
+  <button class="expand-btn" onclick="expandAll('a5')">▼ Expand all answers</button>
+  <div class="q-grid">
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q1</span>
+        <span class="q-title">Definitions: Monomer, Polymer, Polymerization, Degree of Polymerization, Repeating Unit</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box amber">Five key definitions — each with a short example earns full marks in GTU.</div>
+        <div class="sub-section">
+          <div class="sub-section-title">1. Monomer</div>
+          <div class="point"><div class="dot amber"></div><span>Small, simple molecules that can join together repeatedly to form a polymer.</span></div>
+          <div class="eg-note">Example: Ethylene (CH₂=CH₂), Vinyl chloride (CH₂=CHCl), Styrene.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">2. Polymer</div>
+          <div class="point"><div class="dot amber"></div><span>Large molecules (macromolecules) formed by joining many monomer units through chemical bonds.</span></div>
+          <div class="eg-note">Example: Polyethylene (−CH₂−CH₂−)ₙ, PVC, Nylon, Bakelite.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">3. Polymerization</div>
+          <div class="point"><div class="dot amber"></div><span>The chemical process by which monomers are joined together to form a polymer.</span></div>
+          <div class="eg-note">nCH₂=CH₂ → (−CH₂−CH₂−)ₙ (polymerization of ethylene)</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">4. Degree of Polymerization (n)</div>
+          <div class="point"><div class="dot amber"></div><span>The number of repeating units (monomer units) present in a polymer chain.</span></div>
+          <div class="point"><div class="dot amber"></div><span>Higher degree of polymerization → higher molecular weight → stronger polymer.</span></div>
+          <div class="rxn">n = Molecular weight of polymer / Molecular weight of monomer</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">5. Repeating Unit (Mer)</div>
+          <div class="point"><div class="dot amber"></div><span>The smallest structural unit that repeats along the polymer chain.</span></div>
+          <div class="eg-note">In polyethylene: repeating unit is −CH₂−CH₂−</div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: 5 definitions × 1.2 marks each = 6 marks. One example per definition is enough.</span></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q2</span>
+        <span class="q-title">Classification of Polymers — Molecular Structure, Monomer & Thermal Behaviour</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">A) Based on Molecular Structure</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Linear polymers:</strong> Monomers joined in a straight chain. Soft, flexible, high melting point. Example: HDPE, Nylon, PVC.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Branched polymers:</strong> Main chain with side branches. Less dense, lower melting point. Example: LDPE.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Cross-linked (network) polymers:</strong> 3D network structure with covalent bonds. Hard, rigid, brittle. Example: Bakelite, Melamine, Vulcanized rubber.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">B) Based on Monomer (Source)</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Homopolymer:</strong> Made from only one type of monomer. Example: Polyethylene (only ethylene).</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Copolymer:</strong> Made from two or more different monomers. Example: Nylon 6,6 (hexamethylenediamine + adipic acid).</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">C) Based on Thermal Behaviour</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Thermoplastics:</strong> Soften on heating, harden on cooling — reversible. Can be reshaped. Example: PVC, Polyethylene, Polystyrene.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Thermosetting plastics:</strong> Permanently harden on heating — irreversible. Cannot be reshaped. Example: Bakelite, Epoxy resin, Urea formaldehyde.</span></div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: 3 classification types × 2 marks each = 6. Always write examples.</span></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q3</span>
+        <span class="q-title">Types of Polymerization — Addition & Condensation</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">A) Addition Polymerization (Chain-growth)</div>
+          <div class="point"><div class="dot amber"></div><span>Monomers with double bonds (C=C) open up and join together without loss of any atom or molecule.</span></div>
+          <div class="point"><div class="dot amber"></div><span>Molecular weight of polymer = sum of molecular weights of all monomers.</span></div>
+          <div class="point"><div class="dot amber"></div><span>Three steps: Initiation → Propagation → Termination.</span></div>
+          <div class="rxn">nCH₂=CH₂ → (−CH₂−CH₂−)ₙ (Polyethylene)</div>
+          <div class="rxn">nCH₂=CHCl → (−CH₂−CHCl−)ₙ (PVC)</div>
+          <div class="eg-note">Examples: Polyethylene, PVC, Polystyrene, PTFE, Polypropylene.</div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">B) Condensation Polymerization (Step-growth)</div>
+          <div class="point"><div class="dot amber"></div><span>Monomers with two functional groups react together with loss of small molecules (H₂O, HCl, NH₃).</span></div>
+          <div class="point"><div class="dot amber"></div><span>Polymer molecular weight < sum of monomer weights due to elimination of small molecules.</span></div>
+          <div class="rxn">n(H₂N−R−NH₂) + n(HOOC−R'−COOH) → Nylon + nH₂O</div>
+          <div class="eg-note">Examples: Nylon, Bakelite, Polyester, Epoxy resin, PHBV.</div>
+        </div>
+        <div class="sec-label">Key Differences</div>
+        <div class="point"><div class="dot amber"></div><span>Addition → no byproduct lost; Condensation → small molecule (H₂O, HCl) released.</span></div>
+        <div class="point"><div class="dot amber"></div><span>Addition → needs double bond in monomer; Condensation → needs bifunctional groups.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Write reactions for both types + one difference = 6 marks secured.</span></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q4</span>
+        <span class="q-title">Preparation, Properties & Uses of Important Polymers</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">Polyethylene (PE)</div>
+          <div class="rxn">nCH₂=CH₂ → (−CH₂−CH₂−)ₙ</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Properties:</strong> Flexible, tough, chemically inert, low density (LDPE), high density (HDPE).</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Uses:</strong> Packaging films, carry bags, pipes, bottles, insulation of cables.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Polypropylene (PP)</div>
+          <div class="rxn">nCH₂=CHCH₃ → (−CH₂−CH(CH₃)−)ₙ</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Properties:</strong> Rigid, high melting point, excellent chemical resistance.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Uses:</strong> Ropes, fibers, containers, automotive parts, carpets.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">PVC (Polyvinyl Chloride)</div>
+          <div class="rxn">nCH₂=CHCl → (−CH₂−CHCl−)ₙ</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Properties:</strong> Rigid or flexible (with plasticizer), good chemical resistance.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Uses:</strong> Pipes, water tanks, flooring, electrical cable insulation, raincoats.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">PTFE (Teflon — Polytetrafluoroethylene)</div>
+          <div class="rxn">nCF₂=CF₂ → (−CF₂−CF₂−)ₙ</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Properties:</strong> Non-stick, highest chemical resistance, withstands −200°C to +260°C.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Uses:</strong> Non-stick cookware, gaskets, seals, surgical implants.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Polystyrene (PS)</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Properties:</strong> Transparent, rigid, brittle, good electrical insulator.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Uses:</strong> Disposable cups, packaging (thermocol/foam), toys, CD cases.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Bakelite (Phenol Formaldehyde)</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Properties:</strong> Hard, rigid, thermosetting, excellent electrical insulator, heat resistant.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Uses:</strong> Electrical switches, plugs, handles, radio cabinets.</span></div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Preparation reaction + 2 properties + 2 uses for each polymer = full marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q5</span>
+        <span class="q-title">PHBV & Nylon-2 / Nylon-6 — Chemical Composition & Uses</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="sub-section">
+          <div class="sub-section-title">PHBV — Poly(β-HydroxyButyrate-co-β-hydroxy Valerate)</div>
+          <div class="point"><div class="dot amber"></div><span>PHBV is a biodegradable, biocompatible copolymer produced by bacteria (Ralstonia eutropha).</span></div>
+          <div class="point"><div class="dot amber"></div><span>It is a copolymer of 3-hydroxybutanoic acid (HB) and 3-hydroxypentanoic acid (HV).</span></div>
+          <div class="sec-label" style="margin-top:6px">Properties</div>
+          <div class="point"><div class="dot amber"></div><span>Biodegradable, biocompatible, thermoplastic, non-toxic.</span></div>
+          <div class="point"><div class="dot amber"></div><span>Similar properties to polypropylene.</span></div>
+          <div class="sec-label">Uses of PHBV</div>
+          <div class="point"><div class="dot amber"></div><span>Biodegradable packaging, disposable cups, surgical sutures, drug delivery, implants.</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">Nylon-2-Nylon-6 (Copolyamide)</div>
+          <div class="point"><div class="dot amber"></div><span>A copolymer of glycine (Nylon-2 unit) and aminocaproic acid (Nylon-6 unit) — condensation polymerization.</span></div>
+          <div class="rxn">n(H₂N−CH₂−COOH) + n(H₂N−(CH₂)₅−COOH) → Copolymer + nH₂O</div>
+          <div class="sec-label">Properties</div>
+          <div class="point"><div class="dot amber"></div><span>Strong, elastic, biodegradable, biocompatible.</span></div>
+          <div class="sec-label">Uses</div>
+          <div class="point"><div class="dot amber"></div><span>Biomedical applications — surgical sutures, tissue engineering, drug delivery systems.</span></div>
+        </div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: PHBV = biodegradable plastic made by bacteria. Nylon-2-Nylon-6 = biomedical copolymer. These two facts alone score big marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q6</span>
+        <span class="q-title">Natural Rubber & Its Properties</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box amber">Natural rubber is a natural polymer obtained from the latex of the rubber tree (Hevea brasiliensis). It is also known as cis-polyisoprene.</div>
+        <div class="sec-label">Chemical Structure</div>
+        <div class="rxn">Monomer: Isoprene (CH₂=C(CH₃)−CH=CH₂)</div>
+        <div class="rxn">Polymer: (−CH₂−C(CH₃)=CH−CH₂−)ₙ — cis configuration</div>
+        <div class="sec-label">Properties of Natural Rubber</div>
+        <div class="point"><div class="dot amber"></div><span><strong>Elasticity:</strong> Can be stretched to 10× its original length and returns to original shape.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Flexibility:</strong> Soft and flexible at room temperature.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Electrical insulator:</strong> Good insulation properties.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Water resistance:</strong> Insoluble in water — impermeable to water and air.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Solubility:</strong> Soluble in organic solvents like benzene, ether, CS₂.</span></div>
+        <div class="sec-label">Disadvantages (Raw Rubber)</div>
+        <div class="point"><div class="dot amber"></div><span>Becomes sticky in summer, brittle in winter.</span></div>
+        <div class="point"><div class="dot amber"></div><span>Low tensile strength, poor resistance to chemicals and oxidation.</span></div>
+        <div class="eg-note">These disadvantages are overcome by Vulcanization.</div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Write cis-polyisoprene structure + 4 properties + mention vulcanization connection = 6 marks.</span></div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q7</span>
+        <span class="q-title">Vulcanization of Rubber & Its Advantages</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box amber">Vulcanization is the process of heating raw rubber with sulfur (2–3%) at 100–180°C to improve its properties. Cross-links of −S−S− bridges are formed between polymer chains.</div>
+        <div class="sec-label">Process</div>
+        <div class="point"><div class="dot amber"></div><span>Raw rubber + Sulfur (2–3%) → heated at 100–180°C → cross-linked rubber.</span></div>
+        <div class="point"><div class="dot amber"></div><span>Sulfur atoms form covalent cross-links (−S−S−) between adjacent polymer chains.</span></div>
+        <div class="point"><div class="dot amber"></div><span>More sulfur → harder rubber (ebonite with 30–40% sulfur).</span></div>
+        <div class="rxn">Rubber−CH₂ + S → Rubber−CH₂−S−S−CH₂−Rubber (cross-links formed)</div>
+        <div class="sec-label">Advantages of Vulcanization</div>
+        <div class="point"><div class="dot amber"></div><span><strong>High tensile strength:</strong> Cross-links prevent chain slippage → stronger rubber.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Better elasticity:</strong> Stretches uniformly and recovers shape completely.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Heat resistance:</strong> Does not become sticky in hot weather.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Chemical resistance:</strong> Resists attack by acids, alkalis, and oxidizing agents.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>No temperature sensitivity:</strong> Maintains properties over a wide range of temperature.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Reduced water absorption:</strong> Becomes less permeable to moisture.</span></div>
+        <div class="sec-label">Applications</div>
+        <div class="point"><div class="dot amber"></div><span>Tyres, tubes, belts, hoses, shoes, gloves, erasers, seals.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: Definition + sulfur cross-link concept + 5 advantages = full marks. Mention ebonite for bonus.</span></div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-head" onclick="tog(this)">
+        <span class="q-num num-5">Q8</span>
+        <span class="q-title">Classification & Applications of Insulating Materials</span>
+        <span class="q-marks">6 marks</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="q-body">
+        <div class="def-box amber">Insulating materials (insulators) are substances that do not allow the flow of electricity, heat, or sound through them. In electrical engineering, they prevent leakage of current.</div>
+        <div class="sec-label">Classification of Insulating Materials</div>
+        <div class="sub-section">
+          <div class="sub-section-title">A) Based on Physical State</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Solid insulators:</strong> Rubber, Bakelite, Mica, Glass, Porcelain, PTFE, PVC.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Liquid insulators:</strong> Transformer oil, Cable oil, Varnish, Synthetic resins.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Gaseous insulators:</strong> Air, Nitrogen (N₂), SF₆ (sulfur hexafluoride).</span></div>
+        </div>
+        <div class="sub-section">
+          <div class="sub-section-title">B) Based on Composition</div>
+          <div class="point"><div class="dot amber"></div><span><strong>Organic insulators:</strong> Rubber, Paper, Cellulose, Cotton, Silk.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Inorganic insulators:</strong> Mica, Glass, Asbestos, Porcelain, Ceramic.</span></div>
+          <div class="point"><div class="dot amber"></div><span><strong>Synthetic insulators:</strong> Bakelite, PTFE (Teflon), PVC, Epoxy resins.</span></div>
+        </div>
+        <div class="sec-label">Properties of Good Insulating Material</div>
+        <div class="point"><div class="dot amber"></div><span>High electrical resistance (dielectric strength).</span></div>
+        <div class="point"><div class="dot amber"></div><span>High mechanical strength, low moisture absorption, heat resistance.</span></div>
+        <div class="sec-label">Applications</div>
+        <div class="point"><div class="dot amber"></div><span><strong>Rubber:</strong> Cable insulation, gloves, switchboards.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Mica:</strong> Capacitors, motor windings, heating elements (withstands high temp).</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Glass/Porcelain:</strong> Overhead power line insulators, spark plugs.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>PTFE (Teflon):</strong> High-frequency cable insulation, circuit boards.</span></div>
+        <div class="point"><div class="dot amber"></div><span><strong>Transformer oil:</strong> Insulation and cooling in transformers.</span></div>
+        <div class="tip-box"><span class="tip-icon">💡</span><span>GTU tip: 3 classification types + 4–5 applications = guaranteed 6 marks.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Chemistry GTU Exam Notes &nbsp;·&nbsp; Assignments 3 · 4 · 5 &nbsp;·&nbsp; 6-mark format
+</footer>
+
+<script>
+function tog(head){
+  const body=head.nextElementSibling;
+  const ch=head.querySelector('.chevron');
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  ch.classList.toggle('open',!open);
+}
+
+let states={a3:false,a4:false,a5:false};
+function expandAll(id){
+  states[id]=!states[id];
+  const panel=document.getElementById('panel-'+id);
+  panel.querySelectorAll('.q-body').forEach(b=>b.classList.toggle('open',states[id]));
+  panel.querySelectorAll('.chevron').forEach(c=>c.classList.toggle('open',states[id]));
+  panel.querySelector('.expand-btn').textContent=(states[id]?'▲ Collapse all answers':'▼ Expand all answers');
+}
+
+function showPanel(id, navBtn, asgnBtn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  
+  if(navBtn){
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    navBtn.classList.add('active');
+    // sync asgn buttons
+    document.querySelectorAll('.asgn-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.asgn-btn').forEach(b=>{if(b.classList.contains(id))b.classList.add('active')});
+  }
+  if(asgnBtn){
+    document.querySelectorAll('.asgn-btn').forEach(b=>b.classList.remove('active'));
+    asgnBtn.classList.add('active');
+    // sync nav tabs
+    const map={a3:0,a4:1,a5:2};
+    document.querySelectorAll('.nav-tab').forEach((t,i)=>{
+      t.classList.toggle('active',i===map[id]);
+    });
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
